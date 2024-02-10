@@ -21,12 +21,14 @@ namespace MvcMovie.Controllers
         }
 
         // GET: Movies
-        public async Task<IActionResult> Index(string movieGenre, string movieRating, string searchString)
+        public async Task<IActionResult> Index(string sortOrder, string movieGenre, string movieRating, string searchString)
         {
             if (_context.Movie == null)
             {
                 return Problem("Entity set 'MvcMovieContext.Movie'  is null.");
             }
+            ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
             // Use LINQ to get list of genres.
             IQueryable<string> genreQuery = from m in _context.Movie
@@ -53,6 +55,22 @@ namespace MvcMovie.Controllers
             if (!string.IsNullOrEmpty(movieRating))
             {
                 movies = movies.Where(x => x.Rating == movieRating);
+            }
+
+            switch (sortOrder)
+            {
+                case "title_desc":
+                    movies = movies.OrderByDescending(m => m.Title);
+                    break;
+                case "Date":
+                    movies = movies.OrderBy(m => m.ReleaseDate);
+                    break;
+                case "date_desc":
+                    movies = movies.OrderByDescending(m => m.ReleaseDate);
+                    break;
+                default:
+                    movies = movies.OrderBy(m => m.Title);
+                    break;
             }
 
             var movieGenreVM = new MovieGenreViewModel
