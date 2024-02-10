@@ -1,8 +1,24 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<MvcMovieUser> SignInManager
+@inject MvcMovieUserManager UserManager
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <h1 class="display-4">Welcome @await UserManager.GetNickname(User).</h1>
+        <p>Thanks for registering with us.
+        Now you can upload your own reviews.</p>
+    }
+    else
+    {
+        <h1 class="display-4">Welcome</h1>
+        <p>You can explore our app.
+        Having an account unlocks new features.</p>
+    }
 </div>

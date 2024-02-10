@@ -1,4 +1,8 @@
 ﻿@model MvcMovie.Models.Movie
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<MvcMovieUser> SignInManager
+@inject MvcMovieUserManager UserManager
 
 @{
     ViewData["Title"] = "Details";
@@ -37,6 +41,9 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    @if (SignInManager.IsSignedIn(User))
+    {   
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> <br />
+    }
     <a asp-action="Index">Back to List</a>
 </div>
