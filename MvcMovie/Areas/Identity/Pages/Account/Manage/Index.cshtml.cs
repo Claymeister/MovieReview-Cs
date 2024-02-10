@@ -9,17 +9,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MvcMovie.Models;
 
 namespace MvcMovie.Areas.Identity.Pages.Account.Manage
 {
     public class IndexModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<MvcMovieUser> _userManager;
+        private readonly SignInManager<MvcMovieUser> _signInManager;
 
         public IndexModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            UserManager<MvcMovieUser> userManager,
+            SignInManager<MvcMovieUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -55,12 +56,16 @@ namespace MvcMovie.Areas.Identity.Pages.Account.Manage
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Nickname")]
+            public string Nickname { get; set; }
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
         }
 
-        private async Task LoadAsync(IdentityUser user)
+        private async Task LoadAsync(MvcMovieUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
@@ -69,6 +74,7 @@ namespace MvcMovie.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
+                Nickname = user.Nickname,
                 PhoneNumber = phoneNumber
             };
         }
@@ -110,6 +116,12 @@ namespace MvcMovie.Areas.Identity.Pages.Account.Manage
                 }
             }
 
+            if (Input.Nickname != user.Nickname)
+            {
+                user.Nickname = Input.Nickname;
+            }
+
+            await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();

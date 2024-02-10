@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using MvcMovie.Data;
 using Microsoft.AspNetCore.Identity;
+using MvcMovie.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,19 +16,21 @@ builder.Services.AddDbContext<MvcMovieContext>(options =>
 
 //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+builder.Services.AddDefaultIdentity<MvcMovieUser>(options =>
 {
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
-    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireNonAlphanumeric = true;
     options.Password.RequiredLength = 8;
+
     options.Lockout.MaxFailedAccessAttempts = 5;
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
-    options.SignIn.RequireConfirmedAccount = true;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
+    //options.SignIn.RequireConfirmedAccount = true;
 })
 .AddEntityFrameworkStores<MvcMovieContext>();
 
+builder.Services.AddScoped<MvcMovieUserManager>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 

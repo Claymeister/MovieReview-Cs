@@ -17,23 +17,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using MvcMovie.Models;
 
 namespace MvcMovie.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class ExternalLoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IUserStore<IdentityUser> _userStore;
-        private readonly IUserEmailStore<IdentityUser> _emailStore;
+        private readonly SignInManager<MvcMovieUser> _signInManager;
+        private readonly UserManager<MvcMovieUser> _userManager;
+        private readonly IUserStore<MvcMovieUser> _userStore;
+        private readonly IUserEmailStore<MvcMovieUser> _emailStore;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
 
         public ExternalLoginModel(
-            SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager,
-            IUserStore<IdentityUser> userStore,
+            SignInManager<MvcMovieUser> signInManager,
+            UserManager<MvcMovieUser> userManager,
+            IUserStore<MvcMovieUser> userStore,
             ILogger<ExternalLoginModel> logger,
             IEmailSender emailSender)
         {
@@ -149,7 +150,7 @@ namespace MvcMovie.Areas.Identity.Pages.Account
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
 
-            if (ModelState.IsValid)
+            /*if (ModelState.IsValid)
             {
                 var user = CreateUser();
 
@@ -190,7 +191,7 @@ namespace MvcMovie.Areas.Identity.Pages.Account
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
-            }
+            }*/
 
             ProviderDisplayName = info.ProviderDisplayName;
             ReturnUrl = returnUrl;
@@ -201,7 +202,7 @@ namespace MvcMovie.Areas.Identity.Pages.Account
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<MvcMovieUser>();
             }
             catch
             {
@@ -211,13 +212,13 @@ namespace MvcMovie.Areas.Identity.Pages.Account
             }
         }
 
-        private IUserEmailStore<IdentityUser> GetEmailStore()
+        private IUserEmailStore<MvcMovieUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<IdentityUser>)_userStore;
+            return (IUserEmailStore<MvcMovieUser>)_userStore;
         }
     }
 }
