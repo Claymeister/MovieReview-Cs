@@ -155,7 +155,7 @@ namespace MvcMovie.Controllers
             return View(movie);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         // GET: Movies/Create
         public IActionResult Create()
         {
@@ -165,7 +165,7 @@ namespace MvcMovie.Controllers
         // POST: Movies/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,Genre,Rating")] Movie movie)
@@ -179,7 +179,7 @@ namespace MvcMovie.Controllers
             return View(movie);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         // GET: Movies/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -199,7 +199,7 @@ namespace MvcMovie.Controllers
         // POST: Movies/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ReleaseDate,Genre,Rating")] Movie movie)
@@ -232,7 +232,7 @@ namespace MvcMovie.Controllers
             return View(movie);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         // GET: Movies/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -252,7 +252,7 @@ namespace MvcMovie.Controllers
         }
 
         // POST: Movies/Delete/5
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
