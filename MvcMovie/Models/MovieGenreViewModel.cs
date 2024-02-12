@@ -11,4 +11,9 @@ public class MovieGenreViewModel
     public string? MovieGenre { get; set; }
     public string? MovieRating { get; set; }
     public string? SearchString { get; set; }
+
+    public int PageIndex { get; set; }
+    public int PageSize { get; set; }
+    public int TotalCount { get; set; }
+    public int TotalPages { get; set; }
 }

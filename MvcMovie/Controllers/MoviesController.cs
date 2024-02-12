@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -21,7 +22,13 @@ namespace MvcMovie.Controllers
         }
 
         // GET: Movies
-        public async Task<IActionResult> Index(string sortOrder, string movieGenre, string movieRating, string searchString)
+        public async Task<IActionResult> Index(
+            string sortOrder, 
+            string movieGenre, 
+            string movieRating, 
+            string searchString, 
+            int pageIndex = 1, 
+            int pageSize = 15)
         {
             if (_context.Movie == null)
             {
@@ -73,11 +80,19 @@ namespace MvcMovie.Controllers
                     break;
             }
 
+            var count = await movies.CountAsync();
+            var paginatedMovies = await PaginatedList<Movie>.CreateAsync(movies, pageIndex, pageSize);
+            var totalPages = (int)Math.Ceiling(count / (double)pageSize);
+
             var movieGenreVM = new MovieGenreViewModel
             {
                 Genres = new SelectList(await genreQuery.Distinct().ToListAsync()),
                 Ratings = new SelectList(await ratingQuery.Distinct().ToListAsync()),
-                Movies = await movies.ToListAsync()
+                Movies = paginatedMovies,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalCount = count,
+                TotalPages = totalPages
             };
 
             return View(movieGenreVM);

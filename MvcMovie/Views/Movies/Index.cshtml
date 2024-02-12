@@ -17,12 +17,13 @@
 }
 <form asp-controller="Movies" asp-action="Index" method="get">
     <p>
-
-        Genre: <select asp-for="MovieGenre" asp-items="Model.Genres">
+        Genre:
+        <select asp-for="MovieGenre" asp-items="@Model.Genres">
             <option value="">All</option>
         </select>
 
-        Rating: <select asp-for="MovieRating" asp-items="Model.Ratings">
+        Rating:
+        <select asp-for="MovieRating" asp-items="@Model.Ratings">
             <option value="">All</option>
         </select>
 
@@ -36,25 +37,25 @@
         <tr>
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["TitleSortParm"]">
-                    @Html.DisplayNameFor(model => model.Movies![0].Title)
+                    @Html.DisplayNameFor(model => model.Movies[0].Title)
                 </a>
             </th>
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]">
-                    @Html.DisplayNameFor(model => model.Movies![0].ReleaseDate)
+                    @Html.DisplayNameFor(model => model.Movies[0].ReleaseDate)
                 </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Movies![0].Genre)
+                @Html.DisplayNameFor(model => model.Movies[0].Genre)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Movies![0].Rating)
+                @Html.DisplayNameFor(model => model.Movies[0].Rating)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Movies!)
+        @foreach (var item in Model.Movies)
         {
             <tr>
                 <td>
@@ -71,7 +72,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Rating)
                 </td>
-                @if (SignInManager.IsSignedIn(User)) 
+                @if (SignInManager.IsSignedIn(User))
                 {
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -82,3 +83,27 @@
         }
     </tbody>
 </table>
+
+@if (Model.PageIndex > 1)
+{
+    <a class="btn btn-primary" asp-action="Index" asp-route-pageIndex="1" asp-route-pageSize="@Model.PageSize">First</a>
+    <a class="btn btn-primary" asp-action="Index" asp-route-pageIndex="@(Model.PageIndex - 1)" asp-route-pageSize="@Model.PageSize">Previous</a>
+}
+else
+{
+    <button class="btn btn-secondary" disabled>First</button>
+    <button class="btn btn-secondary" disabled>Previous</button>
+}
+
+<span>Page @Model.PageIndex of @Model.TotalPages</span>
+
+@if (Model.PageIndex < Model.TotalPages)
+{
+    <a class="btn btn-primary" asp-action="Index" asp-route-pageIndex="@(Model.PageIndex + 1)" asp-route-pageSize="@Model.PageSize">Next</a>
+    <a class="btn btn-primary" asp-action="Index" asp-route-pageIndex="@Model.TotalPages" asp-route-pageSize="@Model.PageSize">Last</a>
+}
+else
+{
+    <button class="btn btn-secondary" disabled>Next</button>
+    <button class="btn btn-secondary" disabled>Last</button>
+}
