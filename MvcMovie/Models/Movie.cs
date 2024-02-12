@@ -25,4 +25,7 @@ public class Movie
     [StringLength(5)]
     [Required]
     public string? Rating { get; set; }
+
+    // Navigation property
+    public ICollection<Review>? Reviews { get; set; }
 }

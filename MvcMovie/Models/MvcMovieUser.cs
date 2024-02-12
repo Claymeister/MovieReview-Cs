@@ -10,7 +10,10 @@ namespace MvcMovie.Models
         [Required]
         [PersonalData]
         public string Nickname { get; set; }
-        
+
+        // Navigation property
+        public ICollection<Review>? Reviews { get; set; }
+
     }
 
     public class MvcMovieUserManager : UserManager<MvcMovieUser>
