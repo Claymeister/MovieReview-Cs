@@ -36,12 +36,14 @@
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["TitleSortParm"]">
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["TitleSortParm"]" asp-route-movieGenre="@ViewData["CurrentGenre"]"
+                   asp-route-movieRating="@ViewData["CurrentRating"]" asp-route-searchString="@ViewData["CurrentTitle"]">
                     @Html.DisplayNameFor(model => model.Movies[0].Title)
                 </a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]">
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-movieGenre="@ViewData["CurrentGenre"]"
+                   asp-route-movieRating="@ViewData["CurrentRating"]" asp-route-searchString="@ViewData["CurrentTitle"]">
                     @Html.DisplayNameFor(model => model.Movies[0].ReleaseDate)
                 </a>
             </th>
@@ -86,8 +88,12 @@
 
 @if (Model.PageIndex > 1)
 {
-    <a class="btn btn-primary" asp-action="Index" asp-route-pageIndex="1" asp-route-pageSize="@Model.PageSize">First</a>
-    <a class="btn btn-primary" asp-action="Index" asp-route-pageIndex="@(Model.PageIndex - 1)" asp-route-pageSize="@Model.PageSize">Previous</a>
+    <a class="btn btn-primary" asp-action="Index" asp-route-pageIndex="1" asp-route-pageSize="@Model.PageSize"
+       asp-route-sortOrder="@ViewData["CurrentSort"]" asp-route-movieGenre="@ViewData["CurrentGenre"]" 
+       asp-route-movieRating="@ViewData["CurrentRating"]" asp-route-searchString="@ViewData["CurrentTitle"]">First</a>
+    <a class="btn btn-primary" asp-action="Index" asp-route-pageIndex="@(Model.PageIndex - 1)" asp-route-pageSize="@Model.PageSize"
+       asp-route-sortOrder="@ViewData["CurrentSort"]" asp-route-movieGenre="@ViewData["CurrentGenre"]" 
+       asp-route-movieRating="@ViewData["CurrentRating"]" asp-route-searchString="@ViewData["CurrentTitle"]">Previous</a>
 }
 else
 {
@@ -99,11 +105,16 @@ else
 
 @if (Model.PageIndex < Model.TotalPages)
 {
-    <a class="btn btn-primary" asp-action="Index" asp-route-pageIndex="@(Model.PageIndex + 1)" asp-route-pageSize="@Model.PageSize">Next</a>
-    <a class="btn btn-primary" asp-action="Index" asp-route-pageIndex="@Model.TotalPages" asp-route-pageSize="@Model.PageSize">Last</a>
+    <a class="btn btn-primary" asp-action="Index" asp-route-pageIndex="@(Model.PageIndex + 1)" asp-route-pageSize="@Model.PageSize"
+       asp-route-sortOrder="@ViewData["CurrentSort"]" asp-route-movieGenre="@ViewData["CurrentGenre"]" 
+       asp-route-movieRating="@ViewData["CurrentRating"]" asp-route-searchString="@ViewData["CurrentTitle"]">Next</a>
+    <a class="btn btn-primary" asp-action="Index" asp-route-pageIndex="@Model.TotalPages" asp-route-pageSize="@Model.PageSize"
+       asp-route-sortOrder="@ViewData["CurrentSort"]" asp-route-movieGenre="@ViewData["CurrentGenre"]" 
+       asp-route-movieRating="@ViewData["CurrentRating"]" asp-route-searchString="@ViewData["CurrentTitle"]">Last</a>
 }
 else
 {
     <button class="btn btn-secondary" disabled>Next</button>
     <button class="btn btn-secondary" disabled>Last</button>
 }
+

@@ -23,9 +23,12 @@ namespace MvcMovie.Controllers
 
         // GET: Movies
         public async Task<IActionResult> Index(
-            string sortOrder, 
-            string movieGenre, 
-            string movieRating, 
+            string sortOrder,
+            string currentGenre,
+            string movieGenre,
+            string currentRating,
+            string movieRating,
+            string currentTitle,
             string searchString, 
             int pageIndex = 1, 
             int pageSize = 15)
@@ -34,8 +37,37 @@ namespace MvcMovie.Controllers
             {
                 return Problem("Entity set 'MvcMovieContext.Movie'  is null.");
             }
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+            if (searchString != null)
+            {
+                currentTitle = searchString;
+            }
+            else
+            {
+                searchString = currentTitle;
+            }
+            if (movieGenre != null)
+            {
+                currentGenre = movieGenre;
+            }
+            else
+            {
+                movieGenre = currentGenre;
+            }
+            if(movieRating != null)
+            {
+                currentRating = movieRating;
+            }
+            else
+            {
+                movieRating = currentRating;
+            }
+            ViewData["CurrentGenre"] = currentGenre;
+            ViewData["CurrentRating"] = currentRating;
+            ViewData["CurrentTitle"] = currentTitle;
 
             // Use LINQ to get list of genres.
             IQueryable<string> genreQuery = from m in _context.Movie
