@@ -17,6 +17,38 @@ html {
   min-height: 100%;
 }
 
+.navbar {
+    background-color: #111 !important;
+}
+
+.navbar-light .navbar-brand,
+.navbar-light .navbar-nav .nav-link {
+    color: #fff !important;
+}
+
+.footer {
+    background-color: #111;
+    color: #fff !important;
+    padding: 10px 0;
+    margin-top: auto;
+}
+
 body {
-  margin-bottom: 60px;
+    background-image: url('siata.png');
+    background-color: #111;
+    color: white !important;
+    margin-bottom: 60px;
+    padding-top: 70px;
+    padding-bottom: 70px; 
+}
+
+.tbl-background {
+    color: white !important;
+    background-color: #111 !important;
+    border: 10px solid black;
+}
+
+.bolder {
+    color: white !important;
+    font-weight: bold;
 }

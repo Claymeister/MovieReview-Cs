@@ -13,11 +13,11 @@
 <h1 class="text-center">Reviews - Index</h1>
 @if (User.Identity.IsAuthenticated)
 {
-    <p>
+    <p class ="text-center">
         <a asp-action="Create">Create New</a>
     </p>
 }
-<table class="table">
+<table class="table tbl-background">
     <thead>
         <tr>
             <th>
@@ -58,13 +58,19 @@
             </td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                @if (User.Identity.IsAuthenticated && item.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier))
+                @if (item.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier))
                 {
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 }
+                else if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                }
+
             </td>
         </tr>
 }
     </tbody>
 </table>
+</div>

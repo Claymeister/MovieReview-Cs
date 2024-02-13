@@ -27,9 +27,15 @@ namespace MvcMovie.Controllers
         // GET: Reviews
         public async Task<IActionResult> Index()
         {
-            var mvcMovieContext = _context.Review.Include(r => r.Movie).Include(r => r.User);
-            return View(await mvcMovieContext.ToListAsync());
+            var reviews = await _context.Review
+                .Include(r => r.Movie)
+                .Include(r => r.User)
+                .OrderByDescending(r => r.CreationTime)
+                .ToListAsync();
+
+            return View(reviews);
         }
+
 
         // GET: Reviews/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -141,9 +147,6 @@ namespace MvcMovie.Controllers
             {
                 return NotFound();
             }
-
-            
-
             ModelState.Remove("Movie");
             ModelState.Remove("User");
             if (ModelState.IsValid)
@@ -211,7 +214,8 @@ namespace MvcMovie.Controllers
                 return NotFound();
             }
             // Check if the current user is authorized to edit the review
-            if (review.UserId != User.FindFirstValue(ClaimTypes.NameIdentifier))
+            if (review.UserId != User.FindFirstValue(ClaimTypes.NameIdentifier)
+                && !User.IsInRole("Admin"))
             {
                 return Forbid(); // Return 403 Forbidden if user is not authorized
             }

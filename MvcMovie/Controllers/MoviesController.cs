@@ -31,7 +31,7 @@ namespace MvcMovie.Controllers
             string currentTitle,
             string searchString, 
             int pageIndex = 1, 
-            int pageSize = 15)
+            int pageSize = 12)
         {
             if (_context.Movie == null)
             {
