@@ -187,7 +187,7 @@ namespace MvcMovie.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Movie");
+                    b.ToTable("Movie", (string)null);
                 });
 
             modelBuilder.Entity("MvcMovie.Models.MvcMovieUser", b =>
@@ -289,7 +289,7 @@ namespace MvcMovie.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Review");
+                    b.ToTable("Review", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -11,6 +11,7 @@ namespace MvcMovie.Models
         public int Score { get; set; }
         public string? Description { get; set; }
 
+        [Display(Name = "Timestamp")]
         [DataType(DataType.DateTime)]
         public DateTime CreationTime { get; set; } = DateTime.UtcNow;
 
