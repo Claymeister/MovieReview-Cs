@@ -61,7 +61,8 @@ namespace MvcMovie.Controllers
         [Authorize(Roles = "Member")]
         public IActionResult Create()
         {
-            ViewData["MovieId"] = new SelectList(_context.Movie, "Id", "Title");
+            var movies = _context.Movie.OrderBy(m => m.Title).ToList();
+            ViewData["MovieId"] = new SelectList(movies, "Id", "Title");
             ViewData["CreationTime"] = DateTime.Now;
             ViewData["UserId"] = User.FindFirstValue(ClaimTypes.NameIdentifier);
             _logger.LogInformation("Create wit no args :O");
@@ -74,31 +75,35 @@ namespace MvcMovie.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Score,Description,MovieId,UserId,CreationTime")] Review review)
         {
+            // Check if there is already a review for the selected movie by the current user
+            var existingReview = await _context.Review
+                .FirstOrDefaultAsync(r => r.MovieId == review.MovieId && r.UserId == review.UserId);
+
+            // If a review already exists, display an error message
+            if (existingReview != null)
+            {
+                ModelState.AddModelError(string.Empty, "You have already reviewed this movie.");
+
+            }
+
             ModelState.Remove("Movie");
             ModelState.Remove("User");
+            // Check if the model state is valid
             if (ModelState.IsValid)
             {
-                _logger.LogInformation("ModelState.IsValid triggered");
-                
                 _context.Add(review);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            else
-            {
-                _logger.LogInformation("ModelState is not valid. Errors:");
-                foreach (var modelStateEntry in ModelState.Values)
-                {
-                    foreach (var error in modelStateEntry.Errors)
-                    {
-                        _logger.LogInformation($"Error: {error.ErrorMessage}");
-                    }
-                }
-            }
-            _logger.LogInformation("ModelState.IsValid skipped");
-            ViewData["MovieId"] = new SelectList(_context.Movie, "Id", "Title", review.MovieId);
+
+            // If model state is not valid, populate ViewData and return the view with errors
+            var movies = _context.Movie.OrderBy(m => m.Title).ToList();
+            ViewData["MovieId"] = new SelectList(movies, "Id", "Title");
+            ViewData["CreationTime"] = DateTime.Now;
+            ViewData["UserId"] = review.UserId;
             return View(review);
         }
+
 
 
         // GET: Reviews/Edit/5
@@ -151,8 +156,6 @@ namespace MvcMovie.Controllers
             ModelState.Remove("User");
             if (ModelState.IsValid)
             {
-                try
-                {
                     // Retrieve the existing review from the database
                     var existingReview = await _context.Review.FindAsync(id);
 
@@ -164,18 +167,7 @@ namespace MvcMovie.Controllers
                     // Update the review in the database
                     _context.Update(existingReview);
                     await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ReviewExists(review.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+             
                 return RedirectToAction(nameof(Index));
             }
             else
